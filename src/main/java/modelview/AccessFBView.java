@@ -9,9 +9,6 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.mycompany.mvvmexample.FirestoreContext;
-import com.mycompany.mvvmexample.FirestoreContext;
-import com.mycompany.mvvmexample.FirestoreContext;
-import com.mycompany.mvvmexample.FirestoreContext;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -26,35 +23,51 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import models.Person;
+import models.Criminal;
 
 public class AccessFBView {
 
- 
-     @FXML
-    private TextField nameField;
     @FXML
-    private TextField majorField;
+    private TextField fNameField;
     @FXML
-    private TextField ageField;
+    private TextField lNameField;
+    @FXML
+    private TextField IdField;
+    @FXML
+    private TextField addressField;
+    @FXML
+    private TextField DateOfCrimeField;
+    @FXML
+    private TextField TypeOfCrimeField;
+    @FXML
+    private TextField PunishmentPeriodField;
+
     @FXML
     private Button writeButton;
     @FXML
     private Button readButton;
+
     @FXML
     private TextArea outputField;
-     private boolean key;
-    private ObservableList<Person> listOfUsers = FXCollections.observableArrayList();
-    private Person person;
-    public ObservableList<Person> getListOfUsers() {
-        return listOfUsers;
+    private boolean key;
+    private ObservableList<Criminal> listOfCriminal = FXCollections.observableArrayList();
+    private Criminal criminal;
+
+    public ObservableList<Criminal> getListOfCriminal() {
+        return listOfCriminal;
     }
 
     void initialize() {
 
         AccessDataViewModel accessDataViewModel = new AccessDataViewModel();
-        nameField.textProperty().bindBidirectional(accessDataViewModel.userNameProperty());
-        majorField.textProperty().bindBidirectional(accessDataViewModel.userMajorProperty());
+        fNameField.textProperty().bindBidirectional(accessDataViewModel.fNameProperty());
+        lNameField.textProperty().bindBidirectional(accessDataViewModel.lnameProperty());
+        IdField.textProperty().bindBidirectional(accessDataViewModel.idProperty());
+        addressField.textProperty().bindBidirectional(accessDataViewModel.addressProperty());
+        DateOfCrimeField.textProperty().bindBidirectional(accessDataViewModel.dateOfCrimeProperty());
+        TypeOfCrimeField.textProperty().bindBidirectional(accessDataViewModel.typeOfCrimeProperty());
+        PunishmentPeriodField.textProperty().bindBidirectional(accessDataViewModel.punishmentPeriodProperty());
+
         writeButton.disableProperty().bind(accessDataViewModel.isWritePossibleProperty().not());
     }
 
@@ -63,59 +76,68 @@ public class AccessFBView {
         addData();
     }
 
-        @FXML
+    @FXML
     private void readRecord(ActionEvent event) {
         readFirebase();
     }
-    
+
     public void addData() {
 
-        DocumentReference docRef = App.fstore.collection("References").document(UUID.randomUUID().toString());
+        DocumentReference docRef = App.fstore.collection("Reference").document(UUID.randomUUID().toString());
         // Add document data  with id "alovelace" using a hashmap
         Map<String, Object> data = new HashMap<>();
-        data.put("Name", nameField.getText());
-        data.put("Major", majorField.getText());
-        data.put("Age", Integer.parseInt(ageField.getText()));
+        data.put("First Name", fNameField.getText());
+        data.put("Last Name", lNameField.getText());
+        data.put("ID", IdField.getText());
+        data.put("Address", addressField.getText());
+        data.put("Date_of_crime", DateOfCrimeField.getText());
+        data.put("Type_of_crime", TypeOfCrimeField.getText());
+        data.put("Punishment_period", PunishmentPeriodField.getText());
+
+        //  data.put("Age", Integer.parseInt(ageField.getText()));
         //asynchronously write data
         ApiFuture<WriteResult> result = docRef.set(data);
     }
-    
-        public boolean readFirebase()
-         {
-             key = false;
+
+    public boolean readFirebase() {
+        key = false;
 
         //asynchronously retrieve all documents
-        ApiFuture<QuerySnapshot> future =  App.fstore.collection("References").get();
+        ApiFuture<QuerySnapshot> future = App.fstore.collection("References").get();
         // future.get() blocks on response
         List<QueryDocumentSnapshot> documents;
-        try 
-        {
+        try {
             documents = future.get().getDocuments();
-            if(documents.size()>0)
-            {
+            if (documents.size() > 0) {
                 System.out.println("Outing....");
-                for (QueryDocumentSnapshot document : documents) 
-                {
-                    outputField.setText(outputField.getText()+ document.getData().get("Name")+ " , Major: "+
-                            document.getData().get("Major")+ " , Age: "+
-                            document.getData().get("Age")+ " \n ");
-                    System.out.println(document.getId() + " => " + document.getData().get("Name"));
-                    person  = new Person(String.valueOf(document.getData().get("Name")), 
-                            document.getData().get("Major").toString(),
-                            Integer.parseInt(document.getData().get("Age").toString()));
-                    listOfUsers.add(person);
+                for (QueryDocumentSnapshot document : documents) {
+                    outputField.setText(outputField.getText() + document.getData().get("fName") + " , First Name: "
+                            + document.getData().get("lName") + " , Last Name: "
+                            + document.getData().get("id") + " , id: "
+                            + document.getData().get("address") + " , address: "
+                            + document.getData().get("date_of_crime") + " , Date of Crime:  "
+                            + document.getData().get("type_of_crime") + " , Type of Crime: "
+                            + document.getData().get("punishment_period") + " , Punishment Perios \n"
+                    );
+                    System.out.println(document.getId() + " => " + document.getData().get("fName"));
+                    criminal = new Criminal(String.valueOf(document.getData().get("Name")),
+                            document.getData().get("lName").toString(),
+                            document.getData().get("id").toString(),
+                            document.getData().get("address").toString(),
+                            document.getData().get("date_of_crime").toString(),
+                            document.getData().get("type_of_crime").toString(),
+                            document.getData().get("punishment_period").toString());
+
+                    //Integer.parseInt(document.getData().get("Age").toString()));
+                    listOfCriminal.add(criminal);
                 }
+            } else {
+                System.out.println("No data");
             }
-            else
-            {
-               System.out.println("No data"); 
-            }
-            key=true;
-            
-        }
-        catch (InterruptedException | ExecutionException ex) 
-        {
-             ex.printStackTrace();
+            key = true;
+
+        } catch (InterruptedException | ExecutionException ex) {
+            ex.printStackTrace();
         }
         return key;
     }
