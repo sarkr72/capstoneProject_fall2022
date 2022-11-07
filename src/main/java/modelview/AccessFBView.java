@@ -86,13 +86,13 @@ public class AccessFBView {
         DocumentReference docRef = App.fstore.collection("Reference").document(UUID.randomUUID().toString());
         // Add document data  with id "alovelace" using a hashmap
         Map<String, Object> data = new HashMap<>();
-        data.put("First Name", fNameField.getText());
-        data.put("Last Name", lNameField.getText());
-        data.put("ID", IdField.getText());
-        data.put("Address", addressField.getText());
-        data.put("Date_of_crime", DateOfCrimeField.getText());
-        data.put("Type_of_crime", TypeOfCrimeField.getText());
-        data.put("Punishment_period", PunishmentPeriodField.getText());
+        data.put("fName", fNameField.getText());
+        data.put("lName", lNameField.getText());
+        data.put("id", IdField.getText());
+        data.put("address", addressField.getText());
+        data.put("date_of_crime", DateOfCrimeField.getText());
+        data.put("type_of_crime", TypeOfCrimeField.getText());
+        data.put("punishment_period", PunishmentPeriodField.getText());
 
         //  data.put("Age", Integer.parseInt(ageField.getText()));
         //asynchronously write data
@@ -103,7 +103,7 @@ public class AccessFBView {
         key = false;
 
         //asynchronously retrieve all documents
-        ApiFuture<QuerySnapshot> future = App.fstore.collection("References").get();
+        ApiFuture<QuerySnapshot> future = App.fstore.collection("Reference").get();
         // future.get() blocks on response
         List<QueryDocumentSnapshot> documents;
         try {
@@ -111,16 +111,16 @@ public class AccessFBView {
             if (documents.size() > 0) {
                 System.out.println("Outing....");
                 for (QueryDocumentSnapshot document : documents) {
-                    outputField.setText(outputField.getText() + document.getData().get("fName") + " , First Name: "
-                            + document.getData().get("lName") + " , Last Name: "
-                            + document.getData().get("id") + " , id: "
-                            + document.getData().get("address") + " , address: "
-                            + document.getData().get("date_of_crime") + " , Date of Crime:  "
-                            + document.getData().get("type_of_crime") + " , Type of Crime: "
-                            + document.getData().get("punishment_period") + " , Punishment Perios \n"
-                    );
-                    System.out.println(document.getId() + " => " + document.getData().get("fName"));
-                    criminal = new Criminal(String.valueOf(document.getData().get("Name")),
+                    outputField.setText(outputField.getText() + "First Name: " + document.getData().get("fName")
+                            + " , Last Name: " + document.getData().get("lName")
+                            + " , id: " + document.getData().get("id")
+                            + " , address: " + document.getData().get("address")
+                            + " , Date of Crime:  " + document.getData().get("date_of_crime")
+                            + " , Type of Crime: " + document.getData().get("type_of_crime")
+                            + " , Punishment Period: \n" + document.getData().get("punishment_period"));
+                            System.out.println(" ");
+                  //  System.out.println(document.getfName() + " => " + document.getData().get("fName"));
+                    criminal = new Criminal(String.valueOf(document.getData().get("fName")),
                             document.getData().get("lName").toString(),
                             document.getData().get("id").toString(),
                             document.getData().get("address").toString(),
