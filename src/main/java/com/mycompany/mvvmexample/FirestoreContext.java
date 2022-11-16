@@ -20,7 +20,7 @@ public class FirestoreContext {
     public Firestore firebase() {
         try {
             FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(getClass().getResourceAsStream("key.json")))
+                    .setCredentials(GoogleCredentials.fromStream(getClass().getResourceAsStream("capstonekey.json")))
                     .build();
             FirebaseApp.initializeApp(options);
         } catch (IOException ex) {

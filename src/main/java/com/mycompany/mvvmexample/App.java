@@ -20,7 +20,7 @@ public class App extends Application {
 	public void start(Stage primaryStage) throws Exception {
                 fstore = contxtFirebase.firebase();
 
-		Parent login = FXMLLoader.load(getClass().getResource("AccessFBView.fxml"));
+		Parent login = FXMLLoader.load(getClass().getResource("FileAComplaintView.fxml")); //("/view/SignUpView.fxml")); 
 		Scene scene = new Scene(login);
 		primaryStage.setScene(scene);
 		primaryStage.show();
