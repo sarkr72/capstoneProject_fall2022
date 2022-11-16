@@ -99,6 +99,22 @@ public class FileAComplaintView {
         readFirebase();
     }
 
+    /**
+     * Method to clear the text field after adding data
+     */
+    public void clearTextField() {
+        fullNameField.clear();
+        addressField.clear();
+        telephoneField.clear();
+        dateField.clear();
+        timeField.clear();
+        locationField.clear();
+        complaintDescriptionLabel.clear();
+        additionalEvidenceLabel.clear();
+        signatureField.clear();
+        signatureDateField.clear();
+    }
+
     public void addData() {
 
         DocumentReference docRef = App.fstore.collection("Reference").document(UUID.randomUUID().toString());
@@ -118,6 +134,8 @@ public class FileAComplaintView {
         //  data.put("Age", Integer.parseInt(ageField.getText()));
         //asynchronously write data
         ApiFuture<WriteResult> result = docRef.set(data);
+
+        clearTextField();
     }
 
     public boolean readFirebase() {
