@@ -2,39 +2,53 @@ package models;
 
 public class Criminal {
 
-    private String address;
-    private String data_of_crime;
+    private final String id;
     private String fName;
-    private String id;
     private String lName;
-    private String punishment_period;
-    private String type_of_crime;
-    
+    private String date_of_birth;
+    private String place_of_birth;
+    private String address;
+    private String sex;
+    private String height;
+    private String weight;
+    private String race;
+    private String ethnicity;
+    private String eyeColor;
+    private String hairColor;
 
-    public Criminal(String address, String data_of_crime, String fName, String id, String lName, String punishment_period, String type_of_crime) {
-        this.address = address;
-        this.data_of_crime = data_of_crime;
+    public Criminal(String fName, String lName, String date_of_birth, String place_of_birth, String address, String sex, String height, String weight, String race, String ethnicity, String eyeColor, String hairColor) {
         this.fName = fName;
-        this.id = id;
         this.lName = lName;
-        this.punishment_period = punishment_period;
-        this.type_of_crime = type_of_crime;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
+        this.date_of_birth = date_of_birth;
+        this.place_of_birth = place_of_birth;
         this.address = address;
+        this.sex = sex;
+        this.height = height;
+        this.weight = weight;
+        this.race = race;
+        this.ethnicity = ethnicity;
+        this.eyeColor = eyeColor;
+        this.hairColor = hairColor;
+        this.id = rand();
     }
 
-    public String getData_of_crime() {
-        return data_of_crime;
+    private String rand() {
+        int counter = 0;
+        String str = "";
+        while (counter < 7) {
+            int random = (int) (Math.random() * (10 + 1 - 0)) + 0;
+            str = str + random;
+            counter++;
+        }
+        if (StoreAndBackUpData.getOfficerAccounts().containsKey(str)) {
+            return rand();
+        }else{
+            return str;
+        }
     }
-
-    public void setData_of_crime(String data_of_crime) {
-        this.data_of_crime = data_of_crime;
+    
+    public String getId(){
+        return id;
     }
 
     public String getfName() {
@@ -45,14 +59,6 @@ public class Criminal {
         this.fName = fName;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getlName() {
         return lName;
     }
@@ -61,20 +67,89 @@ public class Criminal {
         this.lName = lName;
     }
 
-    public String getPunishment_period() {
-        return punishment_period;
+    public String getDate_of_birth() {
+        return date_of_birth;
     }
 
-    public void setPunishment_period(String punishment_period) {
-        this.punishment_period = punishment_period;
+    public void setDate_of_birth(String date_of_birth) {
+        this.date_of_birth = date_of_birth;
     }
 
-    public String getType_of_crime() {
-        return type_of_crime;
+    public String getPlace_of_birth() {
+        return place_of_birth;
     }
 
-    public void setType_of_crime(String type_of_crime) {
-        this.type_of_crime = type_of_crime;
+    public void setPlace_of_birth(String place_of_birth) {
+        this.place_of_birth = place_of_birth;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getRace() {
+        return race;
+    }
+
+    public void setRace(String race) {
+        this.race = race;
+    }
+
+    public String getEthnicity() {
+        return ethnicity;
+    }
+
+    public void setEthnicity(String ethnicity) {
+        this.ethnicity = ethnicity;
+    }
+
+    public String getEyeColor() {
+        return eyeColor;
+    }
+
+    public void setEyeColor(String eyeColor) {
+        this.eyeColor = eyeColor;
+    }
+
+    public String getHairColor() {
+        return hairColor;
+    }
+
+    public void setHairColor(String hairColor) {
+        this.hairColor = hairColor;
+    }
+
+    @Override
+    public String toString() {
+        return "Criminal{" + "id=" + id + ", fName=" + fName + ", lName=" + lName + ", date_of_birth=" + date_of_birth + ", place_of_birth=" + place_of_birth + ", address=" + address + ", sex=" + sex + ", height=" + height + ", weight=" + weight + ", race=" + race + ", ethnicity=" + ethnicity + ", eyeColor=" + eyeColor + ", hairColor=" + hairColor + '}';
+    }
+    
 }
