@@ -49,11 +49,13 @@ public class FileAComplaintView {
 
     @FXML
     private TextField signatureField;
+    
     @FXML
     private TextField signatureDateField;
 
     @FXML
     private Button submitBrn;
+    
     @FXML
     private Button readButton;
 
