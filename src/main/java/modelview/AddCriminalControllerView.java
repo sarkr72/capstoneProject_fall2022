@@ -124,7 +124,7 @@ public class AddCriminalControllerView {
         placeOfBirthField.textProperty().bindBidirectional(AddCriminalViewModel.placeOfBirthProperty());
         StreetField.textProperty().bindBidirectional(AddCriminalViewModel.streetProperty());
         CityField.textProperty().bindBidirectional(AddCriminalViewModel.cityProperty());
-        stateComboBox.getSelectionModel().bindBidirectional(AddCriminalViewModel.stateComboBoxProperty());
+        stateComboBox.valueProperty().bindBidirectional(stringProperty);
         MaleRadio.textProperty().bindBidirectional(AddCriminalViewModel.maleRadioProperty());
         FemaleRadio.textProperty().bindBidirectional(AddCriminalViewModel.femaleRadioProperty());
         feetField.textProperty().bindBidirectional(AddCriminalViewModel.feetProperty());
