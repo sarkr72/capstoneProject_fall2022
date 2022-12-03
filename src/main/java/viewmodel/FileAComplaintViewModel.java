@@ -6,10 +6,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class FileAComplaintViewModel {
-
-    
-    
-    
     
     private final StringProperty ComplaintFullName = new SimpleStringProperty();
     private final StringProperty ComplaintAddress = new SimpleStringProperty();
