@@ -5,11 +5,23 @@
  */
 package modelview;
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
 import com.mycompany.mvvmexample.App;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +45,11 @@ public class SignUpController implements Initializable {
     private String lName;
     private TreeMap<String, Officer> officerAccounts = StoreAndBackUpData.getOfficerAccounts();
     private int dCode = 4651;
-
+    // TC: add stuff
+    private boolean key;
+    public static Officer officer;
+    private Officer officer2;
+    private ObservableList<Officer> listOfOfficer = FXCollections.observableArrayList();
     @FXML
     private ImageView imageview;
     @FXML
@@ -67,6 +83,11 @@ public class SignUpController implements Initializable {
     @FXML
     private Pane pane;
 
+    @FXML
+    void goBackToHomePage(ActionEvent event) throws IOException {
+        App.setRoot("HomePageView.fxml");
+    }
+    
     @FXML
     void submitMethod(ActionEvent event) {
         fName = fNameField.getText();
@@ -123,12 +144,16 @@ public class SignUpController implements Initializable {
                                 lNameLabel.setText("");
                             } else {
                                 if (dCode == (Integer.parseInt(departmentCodeField.getText()))) {
+                                    
                                     departmentCodeLabel.setText("");
-                                    Officer officer = new Officer(fName, lName, rand());
-                                    officerAccounts.put(officer.getBadgeN(), officer);
-                                    badgeNumberField.setText("Badge Number: " + officer.getBadgeN());
+                                     officer2 = new Officer(fName, lName, dCode + "", rand());
+                                    officerAccounts.put(officer2.getBadgeN(), officer2);
+                                    badgeNumberField.setText(officer2.getBadgeN());
                                     submitBtn.setDisable(true);
                                     confirmLabel.setVisible(true);
+                                    addData();
+//                                    readFirebase();
+                                    
                                 } else {
                                     departmentCodeLabel.setText("Department code does not match");
                                     fNameLabel.setText("");
@@ -157,16 +182,65 @@ public class SignUpController implements Initializable {
         }
     }
 
-    @FXML
-    void goBackToHomePage(ActionEvent event) throws IOException {
-        App.setRoot("/view/HomePageView.fxml");
+    public void addData() {
+
+        DocumentReference docRef = App.fstore.collection("SignUp").document(UUID.randomUUID().toString());
+        // Add document data  with id "alovelace" using a hashmap
+        Map<String, Object> data = new HashMap<>();
+        data.put("firstName", fNameField.getText());
+        data.put("lastName", lNameField.getText());
+        data.put("departmentCodd", departmentCodeField.getText());
+        data.put("badgeNumber", badgeNumberField.getText());
+        System.out.println("badge add data: " + badgeNumberField.getText());
+        //  data.put("Age", Integer.parseInt(ageField.getText()));
+        //asynchronously write data
+        ApiFuture<WriteResult> result = docRef.set(data);
+
+        // clearTextField();
     }
+
+    // TC: added stuff
+//    public  boolean readFirebase() {
+//        key = false;
+//
+//        ApiFuture<QuerySnapshot> future = App.fstore.collection("SignUp").get();
+//        List<QueryDocumentSnapshot> documents;
+//        try {
+//            documents = future.get().getDocuments();
+//            if (documents.size() > 0) {
+//                for (QueryDocumentSnapshot document : documents) {
+////                    outputField.setText(outputField.getText() + "Firstname: " + document.getData().get("firstName")
+////                            + " , LastName: " + document.getData().get("lastName")
+////                            + " , Address: " + document.getData().get("departmentCodd")
+////                            + " , Telephone: " + document.getData().get("badgeNumber"));
+//                    System.out.println(" ");
+//                    //  System.out.println(document.getfName() + " => " + document.getData().get("fName"));
+//
+//                    officer = new Officer(String.valueOf(document.getData().get("firstname")),
+//                            String.valueOf(document.getData().get("lastName").toString()),
+//                            String.valueOf(document.getData().get("departmentCodd").toString()),
+//                            String.valueOf(document.getData().get("badgeNumber").toString()));
+//                    System.out.println("badge read: "+ document.getData().get("badgeNumber").toString());
+//                    StoreAndBackUpData.getOfficerAccounts().put(document.getData().get("badgeNumber").toString(), officer);
+//                    listOfOfficer.add(officer);
+//                }
+//            } else {
+//                System.out.println("No data");
+//            }
+//            key = true;
+//
+//        } catch (InterruptedException | ExecutionException ex) {
+//            ex.printStackTrace();
+//        }
+//        return key;
+//    }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        
         submitBtn.setDisable(false);
         confirmLabel.setVisible(false);
-        Image image = new Image("/controller/image.png", 645, 650, false, false);
+        Image image = new Image("image.png", 645, 650, false, false);
         imageview.setImage(image);
         imageview.setFitHeight(645);
         imageview.setFitWidth(650);

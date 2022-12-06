@@ -2,7 +2,8 @@ package models;
 
 public class Complaint {
 
-    private String fullName;
+    private String firstName;
+    private String lastName;
     private String address;
     private String telephone;
     private String complaintDate;
@@ -12,9 +13,12 @@ public class Complaint {
     private String witnessDetal;
     private String complainantSignature;
     private String complaintSignDate;
+    private String complaint_id;
 
-    public Complaint(String fullName, String address, String telephone, String complaintDate, String complaintTime, String locationOfComplaint, String complaintDescription, String witnessDetal, String complainantSignature, String complaintSignDate) {
-        this.fullName = fullName;
+    public Complaint(String firstName, String lastName, String address, String telephone, String complaintDate, String complaintTime, String locationOfComplaint, String complaintDescription, String witnessDetal,
+            String complainantSignature, String complaintSignDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.address = address;
         this.telephone = telephone;
         this.complaintDate = complaintDate;
@@ -24,14 +28,24 @@ public class Complaint {
         this.witnessDetal = witnessDetal;
         this.complainantSignature = complainantSignature;
         this.complaintSignDate = complaintSignDate;
+        this.complaint_id = rand();
+
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getAddress() {
@@ -104,6 +118,22 @@ public class Complaint {
 
     public void setComplaintSignDate(String complaintSignDate) {
         this.complaintSignDate = complaintSignDate;
+    }
+
+    public String getComplaint_id() {
+        return complaint_id;
+    }
+
+    public void setComplaint_id(String complaint_id) {
+        this.complaint_id = complaint_id;
+    }
+
+    private String rand() {
+        String str = "";
+        for (int i = 0; i < 4; i++) {
+            str = str + (int) (Math.random() * (10 + 1 - 0)) + 0;
+        }
+        return str;
     }
 
 }

@@ -15,6 +15,8 @@ public class Criminal {
     private String ethnicity;
     private String eyeColor;
     private String hairColor;
+    
+    
 
     public Criminal(String fName, String lName, String date_of_birth, String place_of_birth, String address, String sex, String height, String weight, String race, String ethnicity, String eyeColor, String hairColor) {
         this.fName = fName;

@@ -1,7 +1,5 @@
 package modelview;
 
-
-
 import com.mycompany.mvvmexample.App;
 import viewmodel.FileAComplaintViewModel;
 import com.google.api.core.ApiFuture;
@@ -11,28 +9,48 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.mycompany.mvvmexample.FirestoreContext;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import models.Criminal;
 import models.Complaint;
+import models.StoreAndBackUpData;
 
 public class FileAComplaintView {
 
+    private String name;
+    private String additionalEvidence;
+    private String address;
+    private String complaintDescription;
+    private String date;
+    private String location;
+    private String signature;
+    private String signatureDate;
+    private String time;
+    private String telephone;
+    private String fName;
+    private String lName;
+
     @FXML
-    private TextField fullNameField;
+    private TextField firstNameField;
+
+    @FXML
+    private TextField lastNameField;
     @FXML
     private TextField addressField;
     @FXML
@@ -51,13 +69,13 @@ public class FileAComplaintView {
 
     @FXML
     private TextField signatureField;
-    
+
     @FXML
     private TextField signatureDateField;
 
     @FXML
     private Button submitBrn;
-    
+
     @FXML
     private Button readButton;
 
@@ -66,20 +84,26 @@ public class FileAComplaintView {
     private boolean key;
     private ObservableList<Complaint> listOfComplaint = FXCollections.observableArrayList();
     private Complaint complaint;
+    private TreeMap<String, Complaint> complaints = StoreAndBackUpData.getComplaints();
 
     public ObservableList<Complaint> getListOfComplaint() {
         return listOfComplaint;
     }
 
     @FXML
-    private void goBackToLoggedIN(ActionEvent event) {
-
+    private void goBackToLoggedIN(ActionEvent event) throws IOException {
+        if (LoggedInPageController.loggedIn.compareTo("true") == 0) {
+            App.setRoot("LoggedInView.fxml");
+        } else {
+            App.setRoot("HomePageView.fxml");
+        }
     }
 
     void initialize() {
 
         FileAComplaintViewModel FileAComplaintViewModel = new FileAComplaintViewModel();
-        fullNameField.textProperty().bindBidirectional(FileAComplaintViewModel.fullNameProperty());
+        firstNameField.textProperty().bindBidirectional(FileAComplaintViewModel.fullNameProperty());
+        lastNameField.textProperty().bindBidirectional(FileAComplaintViewModel.fullNameProperty());
         addressField.textProperty().bindBidirectional(FileAComplaintViewModel.addressProperty());
         telephoneField.textProperty().bindBidirectional(FileAComplaintViewModel.telephoneProperty());
         dateField.textProperty().bindBidirectional(FileAComplaintViewModel.complaintDateProperty());
@@ -100,31 +124,16 @@ public class FileAComplaintView {
 
     @FXML
     private void readRecord(ActionEvent event) {
-        readFirebase();
-    }
-
-    /**
-     * Method to clear the text field after adding data
-     */
-    public void clearTextField() {
-        fullNameField.clear();
-        addressField.clear();
-        telephoneField.clear();
-        dateField.clear();
-        timeField.clear();
-        locationField.clear();
-        complaintDescriptionLabel.clear();
-        additionalEvidenceLabel.clear();
-        signatureField.clear();
-        signatureDateField.clear();
+//        readFirebase2();
     }
 
     public void addData() {
 
-        DocumentReference docRef = App.fstore.collection("Reference").document(UUID.randomUUID().toString());
+        DocumentReference docRef = App.fstore.collection("FileAComplain").document(UUID.randomUUID().toString());
         // Add document data  with id "alovelace" using a hashmap
         Map<String, Object> data = new HashMap<>();
-        data.put("fullName", fullNameField.getText());
+        data.put("firstName", firstNameField.getText());
+        data.put("lastName", lastNameField.getText());
         data.put("address", addressField.getText());
         data.put("telephone", telephoneField.getText());
         data.put("complaintDate", dateField.getText());
@@ -135,61 +144,107 @@ public class FileAComplaintView {
         data.put("complainantSignature", signatureField.getText());
         data.put("complaintSignDate", signatureDateField.getText());
 
-        //  data.put("Age", Integer.parseInt(ageField.getText()));
-        //asynchronously write data
         ApiFuture<WriteResult> result = docRef.set(data);
 
-        clearTextField();
-    }
+        fName = firstNameField.getText();
+        lName = lastNameField.getText();
+        address = addressField.getText();
+        date = dateField.getText();
+        time = timeField.getText();
+        telephone = telephoneField.getText();
+        signature = signatureField.getText();
+        signatureDate = signatureDateField.getText();
+        location = locationField.getText();
+        complaintDescription = complaintDescriptionLabel.getText();
+        additionalEvidence = additionalEvidenceLabel.getText();
 
-    public boolean readFirebase() {
-        key = false;
+        if (fName.isBlank()) {
 
-        //asynchronously retrieve all documents
-        ApiFuture<QuerySnapshot> future = App.fstore.collection("Reference").get();
-        // future.get() blocks on response
-        List<QueryDocumentSnapshot> documents;
-        try {
-            documents = future.get().getDocuments();
-            if (documents.size() > 0) {
-                System.out.println("Outing....");
-                for (QueryDocumentSnapshot document : documents) {
-                    outputField.setText(outputField.getText() + "Full Name: " + document.getData().get("fullName")
-                            + " , Address: " + document.getData().get("address")
-                            + " , Telephone: " + document.getData().get("telephone")
-                            + " , Complaint Date: " + document.getData().get("complaintDate")
-                            + " , Complaint Time:  " + document.getData().get("complaintTime")
-                            + " , Location Of Complaint: " + document.getData().get("locationOfComplaint")
-                            + " , Complaint Description: " + document.getData().get("complaintDescription")
-                            + " , Witness Detal: " + document.getData().get("witnessDetal")
-                            + " , Complainant Signature: " + document.getData().get("complainantSignature")
-                            + " , Complaint Sign Date: \n" + document.getData().get("complaintSignDate"));
-                    System.out.println(" ");
-                    //  System.out.println(document.getfName() + " => " + document.getData().get("fName"));
+        } else {
 
-                    complaint = new Complaint(String.valueOf(document.getData().get("fullName")),
-                            document.getData().get("address").toString(),
-                            document.getData().get("telephone").toString(),
-                            document.getData().get("complaintDate").toString(),
-                            document.getData().get("complaintTime").toString(),
-                            document.getData().get("locationOfComplaint").toString(),
-                            document.getData().get("complaintDescription").toString(),
-                            document.getData().get("witnessDetal").toString(),
-                            document.getData().get("complainantSignature").toString(),
-                            document.getData().get("complaintSignDate").toString());
+            if (address.isBlank()) {
 
-                    //Integer.parseInt(document.getData().get("Age").toString()));
-                    listOfComplaint.add(complaint);
-                }
+            } else if (date.isBlank()) {
+
+            } else if (telephone.isBlank()) {
+
+            } else if (signature.isBlank()) {
+
+            } else if (signatureDate.isBlank()) {
+
+            } else if (location.isBlank()) {
+
+            } else if (complaintDescription.isBlank()) {
+
             } else {
-                System.out.println("No data");
-            }
-            key = true;
+                Alert a = new Alert(Alert.AlertType.NONE);
+                a.setAlertType(Alert.AlertType.CONFIRMATION);
+                a.setContentText("You have successfully submitted the complaint form!");
+                a.show();
 
-        } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
+                // String fname, string lastname, String address, String telephone, String complaintDate, String complaintTime, 
+                // String locationOfComplaint, String complaintDescription, String witnessDetal,
+                //  String complainantSignature, String complaintSignDate) 
+                Complaint c = new Complaint(fName, lName, address, telephone, date, time, location,
+                        complaintDescription, additionalEvidence, signature, signatureDate);
+                StoreAndBackUpData.getComplaints().put(c.getComplaint_id(), c);
+                submitBrn.setVisible(false);
+            }
+
         }
-        return key;
+
     }
+
+//    public boolean readFirebase2() {
+//        key = false;
+//
+//        //asynchronously retrieve all documents
+//        ApiFuture<QuerySnapshot> future = App.fstore.collection("Reference").get();
+//        // future.get() blocks on response
+//        List<QueryDocumentSnapshot> documents;
+//        try {
+//            documents = future.get().getDocuments();
+//            if (documents.size() > 0) {
+//                System.out.println("Outing....");
+//                for (QueryDocumentSnapshot document : documents) {
+//                    outputField.setText(outputField.getText() + "Firstname: " + document.getData().get("firstName")
+//                            + " , LastName: " + document.getData().get("lastName")
+//                            + " , Address: " + document.getData().get("address")
+//                            + " , Telephone: " + document.getData().get("telephone")
+//                            + " , Complaint Date: " + document.getData().get("complaintDate")
+//                            + " , Complaint Time:  " + document.getData().get("complaintTime")
+//                            + " , Location Of Complaint: " + document.getData().get("locationOfComplaint")
+//                            + " , Complaint Description: " + document.getData().get("complaintDescription")
+//                            + " , Witness Detal: " + document.getData().get("witnessDetal")
+//                            + " , Complainant Signature: " + document.getData().get("complainantSignature")
+//                            + " , Complaint Sign Date: \n" + document.getData().get("complaintSignDate"));
+//                    System.out.println(" ");
+//                    //  System.out.println(document.getfName() + " => " + document.getData().get("fName"));
+//
+//                    complaint = new Complaint(String.valueOf(document.getData().get("firstname")),
+//                            document.getData().get("lastName").toString(),
+//                            document.getData().get("address").toString(),
+//                            document.getData().get("telephone").toString(),
+//                            document.getData().get("complaintDate").toString(),
+//                            document.getData().get("complaintTime").toString(),
+//                            document.getData().get("locationOfComplaint").toString(),
+//                            document.getData().get("complaintDescription").toString(),
+//                            document.getData().get("witnessDetal").toString(),
+//                            document.getData().get("complainantSignature").toString(),
+//                            document.getData().get("complaintSignDate").toString());
+//                    
+//                            complaints.put(complaint.getComplaint_id(), complaint);
+//                    listOfComplaint.add(complaint);
+//                }
+//            } else {
+//                System.out.println("No data");
+//            }
+//            key = true;
+//
+//        } catch (InterruptedException | ExecutionException ex) {
+//            ex.printStackTrace();
+//        }
+//        return key;
+//    }
 
 }
