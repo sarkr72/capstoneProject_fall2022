@@ -218,47 +218,9 @@ public class AddCriminalController {
         addButton.setVisible(false);
 
         System.out.println(c.toString());
+        addData();
     }
 
-//    public boolean readFirebase3() {
-//        key = false;
-//
-//        //asynchronously retrieve all documents
-//        ApiFuture<QuerySnapshot> future = App.fstore.collection("AddCriminal").get();
-//        // future.get() blocks on response
-//        List<QueryDocumentSnapshot> documents;
-//        try {
-//            documents = future.get().getDocuments();
-//            if (documents.size() > 0) {
-//                System.out.println("Outing....");
-//                for (QueryDocumentSnapshot document : documents) {
-//                    criminal = new Criminal(String.valueOf(document.getData().get("firstName")),
-//                            document.getData().get("lastName").toString(),
-//                            document.getData().get("month").toString(),
-//                            document.getData().get("day").toString(),
-//                            document.getData().get("year").toString(),
-//                            document.getData().get("street").toString(),
-//                            document.getData().get("city").toString(),
-//                            document.getData().get("stateComboBox").toString(),
-//                            document.getData().get("postalCode").toString(),
-//                            document.getData().get("feet").toString(),
-//                            document.getData().get("inches").toString(),
-//                            document.getData().get("hairColorComboBox").toString());
-//
-//                    //Integer.parseInt(document.getData().get("Age").toString()));
-//                    criminals.put(String.valueOf(document.getData().get("firstName")), criminal);
-//                    listOfCriminal.add(criminal);
-//                }
-//            } else {
-//                System.out.println("No data");
-//            }
-//            key = true;
-//
-//        } catch (InterruptedException | ExecutionException ex) {
-//            ex.printStackTrace();
-//        }
-//        return key;
-//    }
     @FXML
     void backToLoggedIn(ActionEvent event) throws IOException {
         App.setRoot("LoggedInView.fxml");

@@ -65,8 +65,8 @@ public class CriminalListController implements Initializable {
 
     @FXML
     private Button detailedViewButton;
-    @FXML
-    private Button historyButton;
+//    @FXML
+//    private Button historyButton;
 
     /**
      * Initializes the controller class.
@@ -76,7 +76,7 @@ public class CriminalListController implements Initializable {
         list.addAll(criminals.values());
         showCriminalList();
         detailedViewButton.disableProperty().bind(Bindings.isEmpty(criminalTable.getSelectionModel().getSelectedItems()));
-        historyButton.disableProperty().bind(Bindings.isEmpty(criminalTable.getSelectionModel().getSelectedItems()));
+//        historyButton.disableProperty().bind(Bindings.isEmpty(criminalTable.getSelectionModel().getSelectedItems()));
 
         Image image = new Image("image.png", 645, 650, false, false);
         imageview.setImage(image);
@@ -110,14 +110,14 @@ public class CriminalListController implements Initializable {
         }
     }
 
-    @FXML
-    public void goToCriminalHistoryView(ActionEvent event) throws IOException {
-        criminal = (Criminal) criminalTable.getSelectionModel().getSelectedItem();
-        if (criminalTable.getSelectionModel().getSelectedItem() == null) {
-            //alertLabel.setVisible(true);
-        } else {
-            App.setRoot("CrimeHistoryView.fxml");
-        }
-    }
+//    @FXML
+//    public void goToCriminalHistoryView(ActionEvent event) throws IOException {
+//        criminal = (Criminal) criminalTable.getSelectionModel().getSelectedItem();
+//        if (criminalTable.getSelectionModel().getSelectedItem() == null) {
+//            //alertLabel.setVisible(true);
+//        } else {
+//            App.setRoot("CrimeHistoryView.fxml");
+//        }
+//    }
 
 }

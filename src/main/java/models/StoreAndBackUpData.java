@@ -108,7 +108,7 @@ public class StoreAndBackUpData {
                             String.valueOf(document.getData().get("witnessDetal").toString()),
                             String.valueOf(document.getData().get("complainantSignature").toString()),
                             String.valueOf(document.getData().get("complaintSignDate").toString()));
-                    System.out.println("compolaint:" + complaint);
+//                    System.out.println("compolaint:" + complaint);
                             complaintsHistory.put(complaint.getComplaint_id(), complaint);
                 }
             } else {
@@ -132,17 +132,17 @@ public class StoreAndBackUpData {
                 System.out.println("Outing....");
                 for (QueryDocumentSnapshot document : documents) {
                    Criminal criminal = new Criminal(String.valueOf(document.getData().get("firstName")),
-                            document.getData().get("lastName").toString(),
-                            document.getData().get("month").toString(),
-                            document.getData().get("day").toString(),
-                            document.getData().get("year").toString(),
-                            document.getData().get("street").toString(),
-                            document.getData().get("city").toString(),
-                            document.getData().get("stateComboBox").toString(),
-                            document.getData().get("postalCode").toString(),
-                            document.getData().get("feet").toString(),
-                            document.getData().get("inches").toString(),
-                            document.getData().get("hairColorComboBox").toString());
+                            String.valueOf(document.getData().get("lastName").toString()),
+                            String.valueOf(document.getData().get("month").toString()),
+                            String.valueOf(document.getData().get("day").toString()),
+                            String.valueOf(document.getData().get("year").toString()),
+                            String.valueOf(document.getData().get("street").toString()),
+                            String.valueOf(document.getData().get("city").toString()),
+                            String.valueOf(document.getData().get("stateComboBox").toString()),
+                            String.valueOf(document.getData().get("postalCode").toString()),
+                            String.valueOf(document.getData().get("feet").toString()),
+                            String.valueOf(document.getData().get("inches").toString()),
+                            String.valueOf(document.getData().get("hairColorComboBox").toString()));
 
                     criminals.put(String.valueOf(document.getData().get("firstName")), criminal);
                   

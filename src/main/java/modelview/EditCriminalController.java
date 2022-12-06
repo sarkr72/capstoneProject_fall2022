@@ -121,11 +121,11 @@ public class EditCriminalController implements Initializable {
         MaleRadio.setToggleGroup(sexChoice);
         FemaleRadio.setToggleGroup(sexChoice);
 
-        if (criminal.getSex().equals("Male")) {
-            sexChoice.selectToggle(MaleRadio);
-        } else {
-            sexChoice.selectToggle(FemaleRadio);
-        }
+//        if (criminal.getSex().equals("Male")) {
+//            sexChoice.selectToggle(MaleRadio);
+//        } else {
+//            sexChoice.selectToggle(FemaleRadio);
+//        }
 
         String[] height = criminal.getHeight().split("' ");
         feetField.setText(height[0]);
