@@ -131,17 +131,18 @@ public class StoreAndBackUpData {
             if (documents.size() > 0) {
                 System.out.println("Outing....");
                 for (QueryDocumentSnapshot document : documents) {
-                   Criminal criminal = new Criminal(String.valueOf(document.getData().get("firstName")),
+                   Criminal criminal = new Criminal(
+                           String.valueOf(document.getData().get("firstName")),
                             String.valueOf(document.getData().get("lastName").toString()),
-                            String.valueOf(document.getData().get("month").toString()),
-                            String.valueOf(document.getData().get("day").toString()),
-                            String.valueOf(document.getData().get("year").toString()),
-                            String.valueOf(document.getData().get("street").toString()),
-                            String.valueOf(document.getData().get("city").toString()),
-                            String.valueOf(document.getData().get("stateComboBox").toString()),
-                            String.valueOf(document.getData().get("postalCode").toString()),
-                            String.valueOf(document.getData().get("feet").toString()),
-                            String.valueOf(document.getData().get("inches").toString()),
+                            String.valueOf(document.getData().get("month").toString()+"/"+document.getData().get("day").toString() +"/"+document.getData().get("year").toString()),
+                            String.valueOf(document.getData().get("placeOfBirth").toString()),
+                            String.valueOf(document.getData().get("street").toString()+", "+document.getData().get("city").toString()+", "+ document.getData().get("stateComboBox").toString()+", "+document.getData().get("postalCode").toString()),
+                            "male",
+                            String.valueOf(document.getData().get("feet").toString()+"' "+document.getData().get("feet").toString())+"\"",
+                            String.valueOf(document.getData().get("weight").toString()),
+                            String.valueOf(document.getData().get("raceComboBox").toString()),
+                            String.valueOf(document.getData().get("ethnicityComboBox").toString()),
+                            String.valueOf(document.getData().get("eyeColorComboBox").toString()),
                             String.valueOf(document.getData().get("hairColorComboBox").toString()));
 
                     criminals.put(String.valueOf(document.getData().get("firstName")), criminal);

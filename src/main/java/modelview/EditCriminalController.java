@@ -1,13 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
+
 package modelview;
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.WriteResult;
 import com.mycompany.mvvmexample.App;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.UUID;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -182,8 +185,41 @@ public class EditCriminalController implements Initializable {
                 }
             }
         });
-        StoreAndBackUpData.getCriminals().put(criminal.getId(), criminal);
+//        StoreAndBackUpData.getCriminals().put(criminal.getId(), criminal);
+        addData();
         System.out.println(criminal.toString());
 
+    }
+    
+    public void addData() {
+
+        DocumentReference docRef = App.fstore.collection("AddCriminal").document(UUID.randomUUID().toString());
+        // Add document data  with id "alovelace" using a hashmap
+        Map<String, Object> data = new HashMap<>();
+        data.put("firstName", firstNameField.getText());
+        data.put("lastName", lastNameField.getText());
+        data.put("month", MonthField.getText());
+        data.put("day", DayField.getText());
+        data.put("year", YearField.getText());
+        data.put("placeOfBirth", placeOfBirthField.getText());
+        data.put("street", StreetField.getText());
+        data.put("city", CityField.getText());
+        data.put("stateComboBox", stateComboBox.getValue());
+        data.put("postalCode", PostalCodeField.getText());
+        data.put("maleRadio", MaleRadio.getText());
+        data.put("femaleRadio", FemaleRadio.getText());
+        data.put("feet", feetField.getText());
+        data.put("inches", inchesField.getText());
+        data.put("weight", weightField.getText());
+        data.put("raceComboBox", raceComboBox.getValue());
+        data.put("ethnicityComboBox", ethnicityComboBox.getValue());
+        data.put("eyeColorComboBox", eyeColorComboBox.getValue());
+        data.put("hairColorComboBox", hairColorComboBox.getValue());
+
+        //  data.put("Age", Integer.parseInt(ageField.getText()));
+        //asynchronously write data
+        ApiFuture<WriteResult> result = docRef.set(data);
+
+        // clearTextField();
     }
 }
