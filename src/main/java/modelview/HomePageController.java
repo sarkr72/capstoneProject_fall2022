@@ -35,7 +35,7 @@ public class HomePageController implements Initializable {
 
     @FXML
     void exit(ActionEvent event) {
-
+        System.exit(0);
     }
     
     
